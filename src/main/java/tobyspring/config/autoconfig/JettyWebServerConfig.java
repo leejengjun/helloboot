@@ -1,28 +1,32 @@
 package tobyspring.config.autoconfig;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.ClassUtils;
 import tobyspring.config.ConditionalMyOnClass;
 import tobyspring.config.MyAutoConfiguration;
 
 @MyAutoConfiguration
-//@Conditional(TomcatWebServerConfig.TomcatCondition.class)
-@ConditionalMyOnClass("org.apache.catalina.startup.Tomcat")
-public class TomcatWebServerConfig {
-    @Bean("tomcatWebServerFactory")
+//@Conditional(JettyWebServerConfig.JettCondition.class)
+@ConditionalMyOnClass("org.eclipse.jetty.server.Server")
+public class JettyWebServerConfig {
+    @Bean("jettyWebServerFactory")
     @ConditionalOnMissingBean
     public ServletWebServerFactory servletWebServerFactory() {
-        return new TomcatServletWebServerFactory();
+        return new JettyServletWebServerFactory();
     }
 
-    /*static class TomcatCondition implements Condition {
+    /*static class JettCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return ClassUtils.isPresent("org.apache.catalina.startup.Tomcat",
+            return ClassUtils.isPresent("org.eclipse.jetty.server.Server",
                     context.getClassLoader());
         }
     }*/
